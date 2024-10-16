@@ -44,6 +44,7 @@
   "license": "MIT",
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",
+    "highlight.js": "^11.10.0",
     "markdown-it": "^14.1.0",
     "ollama": "^0.5.9"
   }

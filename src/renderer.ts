@@ -1,7 +1,12 @@
+
 import './index.css';
+
 // Explicit reference to `dist` needed because of packaging problem with `ollama/browser`.
 import ollama, { GenerateResponse } from 'ollama/dist/browser.cjs';
+
 import markdownit from 'markdown-it';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/default.min.css';
 
 const OLLAMA_MODEL = 'llama3.1';
 
@@ -25,12 +30,24 @@ function refreshWindowSize() {
   window.electronAPI.resizeWindow(width, height);
 }
 
-const md = markdownit();
+const md = markdownit({
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(str, {language: lang}).value;
+      } catch (err) {
+        console.warn(err);
+      }
+    }
+    return ''; // use external default escaping
+  }
+});
 
 function setOutputMarkdown(text: string) {
   output.hidden = text.length == 0;
   const result = md.render(text);
   output.innerHTML = result;
+  // output.innerText = text + '\n\n' + result;
   refreshWindowSize();
 }
 
