@@ -1,7 +1,9 @@
-// import { AbortableAsyncIterator } from 'ollama/src/utils';
 import './index.css';
 // Explicit reference to `dist` needed because of packaging problem with `ollama/browser`.
-import ollama, { ChatResponse } from 'ollama/dist/browser.cjs';
+import ollama, { GenerateResponse } from 'ollama/dist/browser.cjs';
+import markdownit from 'markdown-it';
+
+const OLLAMA_MODEL = 'llama3.1';
 
 const input = document.getElementById("input") as HTMLTextAreaElement;
 const output = document.getElementById("output");
@@ -23,9 +25,12 @@ function refreshWindowSize() {
   window.electronAPI.resizeWindow(width, height);
 }
 
-function setOutput(text: string) {
+const md = markdownit();
+
+function setOutputMarkdown(text: string) {
   output.hidden = text.length == 0;
-  output.innerText = text;
+  const result = md.render(text);
+  output.innerHTML = result;
   refreshWindowSize();
 }
 
@@ -34,18 +39,27 @@ interface AbortableAsyncIterator<T extends object> {
   [Symbol.asyncIterator](): AsyncGenerator<Awaited<T>, void, unknown>;
 }
 
-let response: AbortableAsyncIterator<ChatResponse>;
+let response: AbortableAsyncIterator<GenerateResponse>;
 
 async function run() {
   try {
+    // Disable input to signal generation is in progress.
     input.disabled = true;
-    const inputText = input.value;
-    const message = { role: 'user', content: inputText };
-    response = await ollama.chat({ model: 'llama3.1', messages: [message], stream: true });
+
+    const prompt = `<!-- Request -->
+
+${input.value}
+
+<!-- Response in Markdown syntax -->
+
+`;
+    response = await ollama.generate({ model: OLLAMA_MODEL, prompt: prompt, stream: true });
     
-    setOutput('');
+    let responseText = '';
+    setOutputMarkdown(responseText);
     for await (const part of response) {
-      setOutput(output.innerText + part.message.content);
+      responseText += part.response;
+      setOutputMarkdown(responseText);
     }
   } catch (error) {
     if (error.name !== 'AbortError') {
@@ -81,7 +95,7 @@ window.addEventListener("keydown", (event) => {
       input.value = '';
       input.disabled = false;
       input.focus()
-      setOutput('');
+      setOutputMarkdown('');
       refreshWindowSize();
     } else {
       window.electronAPI.hideWindow();
