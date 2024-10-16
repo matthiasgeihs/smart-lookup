@@ -31,6 +31,7 @@ const createWindow = (): void => {
     hiddenInMissionControl: true,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+      devTools: !app.isPackaged,
     },
   });
 
