@@ -26,7 +26,8 @@ declare global {
 }
 
 function refreshWindowSize() {
-  const height = document.documentElement.offsetHeight;
+  // +1 to ensure scrollbars are not shown
+  const height = document.documentElement.offsetHeight + 1;
   window.electronAPI.resizeWindow(null, height);
 }
 
@@ -106,6 +107,7 @@ window.addEventListener("keydown", (event) => {
       // Abort, if model is currently responding.
       if (response) {
         response.abort();
+        return;
       }
 
       // Clear input and output. Set focus on input and refresh window size.
