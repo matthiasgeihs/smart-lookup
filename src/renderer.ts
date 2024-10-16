@@ -11,7 +11,8 @@ import 'highlight.js/styles/default.min.css';
 const OLLAMA_MODEL = 'llama3.1';
 
 const input = document.getElementById("input") as HTMLTextAreaElement;
-const output = document.getElementById("output");
+const outputDiv = document.getElementById("output");
+const outputText = document.getElementById("output-text");
 
 interface ElectronAPI {
   resizeWindow: (width: number, height: number) => void;
@@ -25,9 +26,8 @@ declare global {
 }
 
 function refreshWindowSize() {
-  const width = window.innerWidth;
   const height = document.documentElement.offsetHeight;
-  window.electronAPI.resizeWindow(width, height);
+  window.electronAPI.resizeWindow(null, height);
 }
 
 const md = markdownit({
@@ -44,9 +44,9 @@ const md = markdownit({
 });
 
 function setOutputMarkdown(text: string) {
-  output.hidden = text.length == 0;
+  outputDiv.hidden = text.length == 0;
   const result = md.render(text);
-  output.innerHTML = result;
+  outputText.innerHTML = result;
   // output.innerText = text + '\n\n' + result;
   refreshWindowSize();
 }
@@ -120,10 +120,6 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
-// Focus input and hide output on load.
-input.focus();
-output.hidden = true;
-
 // Adapt input size when content changes.
 input.addEventListener("input", () => {
   input.style.height = 'auto';
@@ -131,4 +127,8 @@ input.addEventListener("input", () => {
   refreshWindowSize();
 });
 
-input.rows = 1;
+// Focus input and hide output on load.
+input.focus();
+outputDiv.hidden = true;
+refreshWindowSize();
+

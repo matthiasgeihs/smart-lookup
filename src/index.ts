@@ -35,17 +35,6 @@ const createWindow = (): void => {
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  mainWindow.webContents.on('did-finish-load', () => {
-    mainWindow.webContents.executeJavaScript(`
-      [document.documentElement.offsetWidth, 
-       document.documentElement.offsetHeight]
-    `)
-    .then(dimensions => {
-      const [width, height] = dimensions;
-      mainWindow.setSize(width, height);
-    });
-  });
-
   // Allow talking to Ollama server.
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
@@ -57,9 +46,14 @@ const createWindow = (): void => {
   });
 
   ipcMain.on('resize-window', (event, arg) => {
-    const size = mainWindow.getSize();
-    if (size[0] != arg.width || size[1] != arg.height) {
-      mainWindow.setSize(arg.width, arg.height);
+    const [width, height] = mainWindow.getSize();
+    const widthChanged = arg.width && width != arg.width;
+    const heightChanged = arg.height && height != arg.height;
+    if (widthChanged || heightChanged) {
+      mainWindow.setSize(
+        arg.width || width,
+        arg.height || height,
+      );
     }
   });
 
