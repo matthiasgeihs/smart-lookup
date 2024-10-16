@@ -5,10 +5,21 @@ import ollama from 'ollama/dist/browser.cjs';
 const input = document.getElementById("input") as HTMLTextAreaElement;
 const output = document.getElementById("output");
 
+interface ElectronAPI {
+  resizeWindow: (width: number, height: number) => void;
+  hideWindow: () => void;
+}
+
+declare global {
+  interface Window {
+    electronAPI: ElectronAPI;
+  }
+}
+
 function refreshWindowSize() {
   const width = window.innerWidth;
   const height = document.documentElement.offsetHeight;
-  (window as any).electronAPI.resizeWindow(width, height);
+  window.electronAPI.resizeWindow(width, height);
 }
 
 function setOutput(text: string) {
@@ -19,7 +30,6 @@ function setOutput(text: string) {
 
 async function run() {
   try {
-    
     input.disabled = true;
     const inputText = input.value;
     const message = { role: 'user', content: inputText };
@@ -29,7 +39,6 @@ async function run() {
     for await (const part of response) {
       setOutput(output.innerText + part.message.content);
     }
-
   } finally {
     input.disabled = false;
   }
@@ -40,6 +49,14 @@ input.addEventListener("keydown", (event) => {
   if (event.key === "Enter" && !event.shiftKey) {
     event.preventDefault();
     run();
+  } else if (event.key === "Escape") {
+    if (input.value) {
+      input.value = '';
+      setOutput('');
+      refreshWindowSize();
+    } else {
+      window.electronAPI.hideWindow();
+    }
   }
 });
 

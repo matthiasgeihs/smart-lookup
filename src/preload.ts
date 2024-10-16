@@ -5,4 +5,5 @@ import { contextBridge, ipcRenderer } from 'electron';
 
 contextBridge.exposeInMainWorld('electronAPI', {
   resizeWindow: (width: number, height: number) => ipcRenderer.send('resize-window', { width, height }),
+  hideWindow: () => ipcRenderer.send('hide-window'),
 });

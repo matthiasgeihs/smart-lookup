@@ -10,9 +10,15 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+let mainWindow: BrowserWindow;
+
 const createWindow = (): void => {
+  if (mainWindow) {
+    throw new Error('Main window already exists');
+  }
+
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     height: 400,
     width: 600,
     maxWidth: 600,
@@ -53,6 +59,10 @@ const createWindow = (): void => {
       mainWindow.setSize(arg.width, arg.height);
     }
   });
+
+  ipcMain.on('hide-window', () => {
+    mainWindow.hide();
+  });
 };
 
 // This method will be called when Electron has finished
@@ -63,15 +73,18 @@ app.on('ready', createWindow);
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  app.quit();
-});
+// app.on('window-all-closed', () => {
+//   app.quit();
+// });
 
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
+  // if (BrowserWindow.getAllWindows().length === 0) {
+  //   createWindow();
+  // }
+  if (mainWindow) {
+    mainWindow.show();
   }
 });
 
