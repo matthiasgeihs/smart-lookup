@@ -14,6 +14,7 @@ import { rendererConfig } from './webpack.renderer.config';
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
+    icon: './assets/app',
     extraResource: [
       "./assets/trayTemplate.png",
       "./assets/trayTemplate@2x.png",
