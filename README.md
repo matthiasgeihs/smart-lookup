@@ -31,5 +31,4 @@ The settings can be found in `~/.smart-lookup`.
 
 ## TODO
 
-- UI: loader
 - lint, prettier

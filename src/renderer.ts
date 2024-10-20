@@ -14,6 +14,7 @@ let settings = defaultSettings();
 const input = document.getElementById("input") as HTMLTextAreaElement;
 const outputDiv = document.getElementById("output");
 const outputText = document.getElementById("output-text");
+const loader = document.getElementById("loader");
 
 interface ElectronAPI {
   resizeWindow: (width: number, height: number) => void;
@@ -28,12 +29,17 @@ declare global {
   }
 }
 
-document.body.style.color = settings.foregroundColor;
-document.body.style.backgroundColor = settings.backgroundColor;
-window.electronAPI.onUpdateSettings((_settings: Settings) => {
-  settings = _settings;
+
+function refreshColors() {
   document.body.style.color = settings.foregroundColor;
   document.body.style.backgroundColor = settings.backgroundColor;
+  loader.style.borderTopColor = settings.foregroundColor;
+}
+refreshColors();
+
+window.electronAPI.onUpdateSettings((_settings: Settings) => {
+  settings = _settings;
+  refreshColors();
 });
 
 function refreshWindowSize() {
@@ -74,6 +80,7 @@ async function run() {
   try {
     // Disable input to signal generation is in progress.
     input.disabled = true;
+    loader.hidden = false;
 
     const prompt = `<!-- Request -->
 
@@ -97,6 +104,7 @@ ${input.value}
   } finally {
     response = undefined;
     input.disabled = false;
+    loader.hidden = true;
 
     // Return focus to input so that we can continue typing.
     // input.focus()
@@ -140,10 +148,11 @@ input.addEventListener("input", () => {
   refreshWindowSize();
 });
 
-// Focus input and hide output on load.
+// Initialize HTML elements.
 input.focus();
 outputDiv.hidden = true;
 refreshWindowSize();
+loader.hidden = true;
 
 // Load settings.
 window.electronAPI.getSettings();

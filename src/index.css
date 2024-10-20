@@ -11,6 +11,10 @@ body {
   background-color: whitesmoke;
 }
 
+#input-div {
+  font-family: monospace;
+}
+
 #input {
   width: 100%;
   box-sizing: border-box;
@@ -46,12 +50,12 @@ body {
   border: 1px solid lightgray;
 }
 
-.loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
+#loader {
+  border: 0.3ex solid transparent;
+  border-top: 0.3ex solid black;
   border-radius: 50%;
-  /* width: 120px;
-  height: 120px; */
+  width: 1ex;
+  height: 1ex;
   animation: spin 2s linear infinite;
 }
 
