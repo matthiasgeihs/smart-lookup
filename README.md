@@ -4,6 +4,8 @@ Quick and easy AI-assisted lookups. Always have an AI at your finger tips.
 
 Press `⌥ + SPACE` and enter your query. Uses [Ollama](https://ollama.com) for local LLM execution.
 
+![teaser](https://github.com/user-attachments/assets/c52efc03-e565-494b-b1b9-f1a4e725234e)
+
 ## Installation
 
 ### Requirements
