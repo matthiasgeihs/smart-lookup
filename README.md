@@ -28,3 +28,7 @@ Not yet available.
 ## Settings
 
 The settings can be found in `~/.smart-lookup`.
+
+## License
+
+Please see the [LICENSE](LICENSE) file.
