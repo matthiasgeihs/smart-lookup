@@ -1,13 +1,12 @@
-
-import './index.css';
+import "./index.css";
 
 // Explicit reference to `dist` needed because of packaging problem with `ollama/browser`.
-import ollama, { GenerateResponse } from 'ollama/dist/browser.cjs';
+import ollama, { GenerateResponse } from "ollama/dist/browser.cjs";
 
-import markdownit from 'markdown-it';
-import hljs from 'highlight.js';
-import 'highlight.js/styles/default.min.css';
-import { defaultSettings, Settings } from './settings';
+import markdownit from "markdown-it";
+import hljs from "highlight.js";
+import "highlight.js/styles/default.min.css";
+import { defaultSettings, Settings } from "./settings";
 
 let settings = defaultSettings();
 
@@ -20,7 +19,7 @@ interface ElectronAPI {
   resizeWindow: (width: number, height: number) => void;
   hideWindow: () => void;
   getSettings: () => void;
-  onUpdateSettings: (callback:  (settings: Settings) => void) => void;
+  onUpdateSettings: (callback: (settings: Settings) => void) => void;
 }
 
 declare global {
@@ -28,7 +27,6 @@ declare global {
     electronAPI: ElectronAPI;
   }
 }
-
 
 function refreshColors() {
   document.body.style.color = settings.foregroundColor;
@@ -52,13 +50,13 @@ const md = markdownit({
   highlight: function (str, lang) {
     if (lang && hljs.getLanguage(lang)) {
       try {
-        return hljs.highlight(str, {language: lang}).value;
+        return hljs.highlight(str, { language: lang }).value;
       } catch (err) {
         console.warn(err);
       }
     }
-    return ''; // use external default escaping
-  }
+    return ""; // use external default escaping
+  },
 });
 
 function setOutputMarkdown(text: string) {
@@ -89,16 +87,20 @@ ${input.value}
 <!-- Response in Markdown syntax -->
 
 `;
-    response = await ollama.generate({ model: settings.model, prompt: prompt, stream: true });
-    
-    let responseText = '';
+    response = await ollama.generate({
+      model: settings.model,
+      prompt: prompt,
+      stream: true,
+    });
+
+    let responseText = "";
     setOutputMarkdown(responseText);
     for await (const part of response) {
       responseText += part.response;
       setOutputMarkdown(responseText);
     }
   } catch (error) {
-    if (error.name !== 'AbortError') {
+    if (error.name !== "AbortError") {
       alert(`${error}\n\nIs Ollama running?`);
     }
   } finally {
@@ -130,10 +132,10 @@ window.addEventListener("keydown", (event) => {
       }
 
       // Clear input and output. Set focus on input and refresh window size.
-      input.value = '';
+      input.value = "";
       input.disabled = false;
-      input.focus()
-      setOutputMarkdown('');
+      input.focus();
+      setOutputMarkdown("");
       refreshWindowSize();
     } else {
       window.electronAPI.hideWindow();
@@ -143,7 +145,7 @@ window.addEventListener("keydown", (event) => {
 
 // Adapt input size when content changes.
 input.addEventListener("input", () => {
-  input.style.height = 'auto';
+  input.style.height = "auto";
   input.style.height = `${input.scrollHeight}px`;
   refreshWindowSize();
 });

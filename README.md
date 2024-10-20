@@ -28,7 +28,3 @@ Not yet available.
 ## Settings
 
 The settings can be found in `~/.smart-lookup`.
-
-## TODO
-
-- lint, prettier
