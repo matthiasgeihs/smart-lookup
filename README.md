@@ -1,6 +1,8 @@
-# Smart Lookup
+# ✨🔎 Smart Lookup
 
-An AI assistant for quick and simple knowledge tasks.
+Quick and easy AI-assisted lookups. Always have an AI at your finger tips.
+
+Press `⌥ + SPACE` and enter your query. Uses [Ollama](https://ollama.com) for local LLM execution.
 
 ## Installation
 
