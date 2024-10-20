@@ -7,8 +7,9 @@ import ollama, { GenerateResponse } from 'ollama/dist/browser.cjs';
 import markdownit from 'markdown-it';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/default.min.css';
+import { defaultSettings, Settings } from './settings';
 
-const OLLAMA_MODEL = 'llama3.1';
+let settings = defaultSettings();
 
 const input = document.getElementById("input") as HTMLTextAreaElement;
 const outputDiv = document.getElementById("output");
@@ -17,6 +18,8 @@ const outputText = document.getElementById("output-text");
 interface ElectronAPI {
   resizeWindow: (width: number, height: number) => void;
   hideWindow: () => void;
+  getSettings: () => void;
+  onUpdateSettings: (callback:  (settings: Settings) => void) => void;
 }
 
 declare global {
@@ -24,6 +27,14 @@ declare global {
     electronAPI: ElectronAPI;
   }
 }
+
+document.body.style.color = settings.foregroundColor;
+document.body.style.backgroundColor = settings.backgroundColor;
+window.electronAPI.onUpdateSettings((_settings: Settings) => {
+  settings = _settings;
+  document.body.style.color = settings.foregroundColor;
+  document.body.style.backgroundColor = settings.backgroundColor;
+});
 
 function refreshWindowSize() {
   // +1 to ensure scrollbars are not shown
@@ -71,7 +82,7 @@ ${input.value}
 <!-- Response in Markdown syntax -->
 
 `;
-    response = await ollama.generate({ model: OLLAMA_MODEL, prompt: prompt, stream: true });
+    response = await ollama.generate({ model: settings.model, prompt: prompt, stream: true });
     
     let responseText = '';
     setOutputMarkdown(responseText);
@@ -133,6 +144,11 @@ input.addEventListener("input", () => {
 input.focus();
 outputDiv.hidden = true;
 refreshWindowSize();
+
+// Load settings.
+window.electronAPI.getSettings();
+
+// Error handling
 
 window.addEventListener("error", (event) => {
   alert(`Renderer: Unhandled error: ${event.message}`);
