@@ -81,7 +81,7 @@ ${input.value}
     }
   } catch (error) {
     if (error.name !== 'AbortError') {
-      alert(error);
+      alert(`${error}\n\nIs Ollama running?`);
     }
   } finally {
     response = undefined;
@@ -134,3 +134,10 @@ input.focus();
 outputDiv.hidden = true;
 refreshWindowSize();
 
+window.addEventListener("error", (event) => {
+  alert(`Renderer: Unhandled error: ${event.message}`);
+});
+
+window.addEventListener("unhandledrejection", (event) => {
+  alert(`Renderer: Unhandled promise rejection: ${event.reason}`);
+});

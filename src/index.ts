@@ -118,3 +118,17 @@ app.dock.hide();
 // app.setLoginItemSettings({
 //   openAtLogin: true,
 // });
+
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+  if (mainWindow) {
+    mainWindow.webContents.executeJavaScript(`alert("Main: Uncaught Exception: ${error.message}")`);
+  }
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled Rejection:', reason);
+  if (mainWindow) {
+    mainWindow.webContents.executeJavaScript(`alert("Main: Unhandled Rejection: ${reason}")`);
+  }
+});
