@@ -77,7 +77,7 @@ const createWindow = (): void => {
     const tray = new Tray(iconPath);
   
     const contextMenu = Menu.buildFromTemplate([
-      { label: 'Quit Assistant', type: 'normal', click: app.quit },
+      { label: `Quit ${app.name}`, type: 'normal', click: app.quit },
     ])
     tray.setContextMenu(contextMenu)
   
@@ -113,3 +113,8 @@ app.on("did-resign-active", () => {
 });
 
 app.dock.hide();
+
+// Run at login.
+// app.setLoginItemSettings({
+//   openAtLogin: true,
+// });

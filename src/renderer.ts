@@ -81,7 +81,7 @@ ${input.value}
     }
   } catch (error) {
     if (error.name !== 'AbortError') {
-      throw error;
+      alert(error);
     }
   } finally {
     response = undefined;

@@ -8,17 +8,16 @@ body {
 
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
-  background-color: antiquewhite;
+  background-color: whitesmoke;
 }
 
 #input {
   width: 100%;
   box-sizing: border-box;
-  padding: 1ex;
   overflow-y: hidden;
   
   font-family: inherit;
-  font-size: larger;
+  font-size: inherit;
 
   background: transparent;
   border: none;
@@ -33,7 +32,7 @@ body {
 
 #output-text {
   width: 100%;
-  padding: 1ex;
+  /* padding: 1ex; */
   box-sizing: border-box;
   
   font-family: inherit;
@@ -44,4 +43,25 @@ body {
 
 .divider {
   border: 1px solid lightgray;
+}
+
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  /* width: 120px;
+  height: 120px; */
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.flex-container {
+  display: flex;
+  align-items: baseline;
+  padding: 0.5ex;
+  font-size: x-large;
 }

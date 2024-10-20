@@ -1,8 +1,8 @@
 {
-  "name": "quick-assistant",
-  "productName": "Quick Assistant",
+  "name": "smart-lookup",
+  "productName": "Smart Lookup",
   "version": "0.1.0",
-  "description": "An AI assistant for quick and simple lookup tasks.",
+  "description": "AI-assisted knowledge lookup.",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
