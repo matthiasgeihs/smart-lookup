@@ -13,6 +13,10 @@ Press `⌥ + SPACE` and enter your query. Uses [Ollama](https://ollama.com) for 
 Make sure [`Ollama`](https://ollama.com) is installed and running.
 Please also make sure that the target model is already downloaded. The default model currently is `llama3.1`.
 
+### Prebuilt binaries (Apple Silicon)
+
+Download [Smart.Lookup-darwin-arm64-0.1.0.zip](https://github.com/matthiasgeihs/smart-lookup/releases/download/v0.1.0/Smart.Lookup-darwin-arm64-0.1.0.zip), unzip, and copy the application to your application folder.
+
 ### From source
 
 Make sure [`npm`](https://nodejs.org) is installed.
