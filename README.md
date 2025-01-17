@@ -15,7 +15,7 @@ Please also make sure that the target model is already downloaded. The default m
 
 ### Prebuilt binaries (Apple Silicon)
 
-Download [Smart.Lookup-darwin-arm64-0.1.0.zip](https://github.com/matthiasgeihs/smart-lookup/releases/download/v0.1.0/Smart.Lookup-darwin-arm64-0.1.0.zip), unzip, and copy the application to your application folder.
+Download the binaries from the latest [release](https://github.com/matthiasgeihs/smart-lookup/releases), unzip, and copy the application to your application folder.
 
 ### From source
 
