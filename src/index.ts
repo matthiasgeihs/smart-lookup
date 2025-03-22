@@ -6,9 +6,10 @@ import {
   BrowserWindow,
   Menu,
   Tray,
+  shell,
 } from "electron";
 import path from "node:path";
-import fs from "node:fs";
+import fs, { FSWatcher, WatchEventType, WatchListener } from "node:fs";
 import os from "node:os";
 import { defaultSettings, Settings } from "./settings";
 import { deepEqual } from "./util";
@@ -75,26 +76,41 @@ if (fs.existsSync(settingsPath)) {
   fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2));
 }
 
-// fs.watch(settingsPath, (eventType) => {
-//   console.log('Settings file event:', eventType);
-//   if (eventType === 'change') {
-//     try {
-//       const settingsData = fs.readFileSync(settingsPath, 'utf-8');
-//       settings = {
-//         ...settings,
-//         ...JSON.parse(settingsData),
-//       };
-//       console.log('Settings updated:', settings);
-//       if (mainWindow) {
-//         mainWindow.webContents.send('update-settings', settings);
-//       }
-//     } catch (error) {
-//       console.error('Failed to update settings:', error);
-//     }
-//   }
-// });
+// Watch settings file for changes.
+const watchSettingsFile = false;
+if (watchSettingsFile) {
+  const handleSettingsFileChanged = () => {
+    try {
+      const settingsData = fs.readFileSync(settingsPath, "utf-8");
+      settings = {
+        ...settings,
+        ...JSON.parse(settingsData),
+      };
+      console.log("Settings updated:", settings);
+      if (mainWindow) {
+        mainWindow.webContents.send("update-settings", settings);
+      }
+    } catch (error) {
+      console.error("Failed to update settings:", error);
+    }
+  };
+
+  // `fs.watch` is recommended over `fs.watchFile` but does not work reliably
+  // because some editors seem to move the settings file.
+  fs.watchFile(settingsPath, (cur, prev) => {
+    console.log("watchFile triggered");
+    if (cur.mtime != prev.mtime) {
+      console.log("watchFile: file changed");
+      handleSettingsFileChanged();
+    }
+  });
+}
 
 /// App lifetime management
+
+const openSettings = (): void => {
+  shell.openPath(settingsPath);
+};
 
 const createWindow = (): void => {
   if (mainWindow) {
@@ -162,6 +178,7 @@ const createWindow = (): void => {
     const tray = new Tray(iconPath);
 
     const contextMenu = Menu.buildFromTemplate([
+      { label: `Settings...`, type: "normal", click: openSettings },
       { label: `Quit ${app.name}`, type: "normal", click: app.quit },
     ]);
     tray.setContextMenu(contextMenu);
