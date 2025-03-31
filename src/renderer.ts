@@ -61,6 +61,12 @@ const md = markdownit({
 
 function setOutputMarkdown(text: string) {
   outputDiv.hidden = text.length == 0;
+
+  if (text.startsWith("```")) {
+    const i = text.indexOf("\n");
+    text = text.substring(i + 1);
+  }
+
   const result = md.render(text);
   outputText.innerHTML = result;
   // outputText.innerText = text + "\n\n" + result;
@@ -90,7 +96,7 @@ ${input.value}
     response = await ollama.generate({
       model: settings.model,
       prompt: prompt,
-      system: "Respond in raw Markdown. Do not start with triple backticks.", // May need to adapt this depending on model.
+      // system: "Respond in raw Markdown. Do not start with triple backticks.", // May need to adapt this depending on model.
       stream: true,
     });
 
