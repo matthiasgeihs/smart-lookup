@@ -63,7 +63,7 @@ function setOutputMarkdown(text: string) {
   outputDiv.hidden = text.length == 0;
   const result = md.render(text);
   outputText.innerHTML = result;
-  // output.innerText = text + '\n\n' + result;
+  // outputText.innerText = text + "\n\n" + result;
   refreshWindowSize();
 }
 
@@ -90,6 +90,7 @@ ${input.value}
     response = await ollama.generate({
       model: settings.model,
       prompt: prompt,
+      system: "Respond in raw Markdown. Do not start with triple backticks.", // May need to adapt this depending on model.
       stream: true,
     });
 
