@@ -152,6 +152,12 @@ const createWindow = (): void => {
     });
   });
 
+  /// Open links in external browser.
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url); // Open the URL in the system's default browser
+    return { action: "deny" }; // Prevent the app from opening the URL internally
+  });
+
   ipcMain.on("resize-window", (_event, arg) => {
     const [width, height] = mainWindow.getSize();
     const widthChanged = arg.width && width != arg.width;

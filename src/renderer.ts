@@ -4,6 +4,7 @@ import "./index.css";
 import ollama, { GenerateResponse } from "ollama/dist/browser.cjs";
 
 import markdownit from "markdown-it";
+import mila from "markdown-it-link-attributes";
 import hljs from "highlight.js";
 import "highlight.js/styles/default.min.css";
 import { defaultSettings, Settings } from "./settings";
@@ -56,6 +57,13 @@ const md = markdownit({
       }
     }
     return ""; // use external default escaping
+  },
+});
+
+md.use(mila, {
+  attrs: {
+    target: "_blank",
+    rel: "noopener",
   },
 });
 
