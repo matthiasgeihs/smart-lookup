@@ -72,5 +72,10 @@ body {
 }
 
 #copy-markdown-button {
+  display: inline-block;
   -webkit-app-region: no-drag;
+}
+
+#copy-markdown-button:hover {
+  fill: grey;
 }
