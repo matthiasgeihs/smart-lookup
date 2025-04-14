@@ -1,4 +1,5 @@
 import "./index.css";
+import "./tooltip.css";
 
 // Explicit reference to `dist` needed because of packaging problem with `ollama/browser`.
 import ollama, { GenerateResponse } from "ollama/dist/browser.cjs";
