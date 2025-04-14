@@ -71,6 +71,10 @@ body {
   font-size: x-large;
 }
 
+#output-footer {
+  text-align: right;
+}
+
 #copy-markdown-button {
   display: inline-block;
   -webkit-app-region: no-drag;
