@@ -11,10 +11,6 @@ body {
   background-color: whitesmoke;
 }
 
-/* #input-div {
-  font-family: monospace;
-} */
-
 #input {
   width: 100%;
   box-sizing: border-box;
@@ -72,14 +68,26 @@ body {
 }
 
 #output-footer {
+  color: grey;
+  fill: grey;
+  font-size: x-small;
   text-align: right;
+  width: 100%;
+}
+
+#footer-model-label {
+  display: inline-block;
+  margin: 0 1.5ex;
 }
 
 #copy-markdown-button {
+  cursor: pointer;
   display: inline-block;
+  /* float: right; */
   -webkit-app-region: no-drag;
 }
 
 #copy-markdown-button:hover {
-  fill: grey;
+  color: black;
+  fill: black;
 }

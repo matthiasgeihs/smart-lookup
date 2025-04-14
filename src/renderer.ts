@@ -15,8 +15,10 @@ let settings = defaultSettings();
 const input = document.getElementById("input") as HTMLTextAreaElement;
 const outputContainer = document.getElementById("output-container");
 const outputText = document.getElementById("output-text");
-const copyMarkdownButton = document.getElementById("copy-markdown-button");
 const loader = document.getElementById("loader");
+const footer = document.getElementById("output-footer");
+const copyMarkdownButton = document.getElementById("copy-markdown-button");
+const modelLabel = document.getElementById("model-label");
 
 let markdownText = "";
 
@@ -83,6 +85,7 @@ function setOutputMarkdown(text: string) {
   outputText.innerHTML = result;
   // outputText.innerText = text + "\n\n" + result; // For testing.
   markdownText = text;
+  modelLabel.innerText = settings.model;
 
   refreshWindowSize();
 }
@@ -99,7 +102,7 @@ async function run() {
     // Disable input to signal generation is in progress.
     input.disabled = true;
     loader.hidden = false;
-    copyMarkdownButton.style.display = "none";
+    footer.style.display = "none";
 
     const prompt = `<!-- Request -->
 
@@ -130,7 +133,7 @@ ${input.value}
     response = undefined;
     input.disabled = false;
     loader.hidden = true;
-    copyMarkdownButton.style.display = "inline-block";
+    footer.style.display = "inline-block";
     refreshWindowSize();
 
     // Return focus to input so that we can continue typing.
@@ -202,3 +205,8 @@ window.addEventListener("error", (event) => {
 window.addEventListener("unhandledrejection", (event) => {
   alert(`Renderer: Unhandled promise rejection: ${event.reason}`);
 });
+
+// Test environment.
+if (process.env.NODE_ENV === "development") {
+  setOutputMarkdown("# Hello World\n\nThis is a test.");
+}
