@@ -9,7 +9,7 @@ import {
   shell,
 } from "electron";
 import path from "node:path";
-import fs, { FSWatcher, WatchEventType, WatchListener } from "node:fs";
+import fs from "node:fs";
 import os from "node:os";
 import { defaultSettings, Settings } from "./settings";
 import { deepEqual } from "./util";
