@@ -14,7 +14,10 @@ let settings = defaultSettings();
 const input = document.getElementById("input") as HTMLTextAreaElement;
 const outputContainer = document.getElementById("output-container");
 const outputText = document.getElementById("output-text");
+const copyMarkdownButton = document.getElementById("copy-markdown-button");
 const loader = document.getElementById("loader");
+
+let markdownText = "";
 
 interface ElectronAPI {
   resizeWindow: (width: number, height: number) => void;
@@ -77,7 +80,9 @@ function setOutputMarkdown(text: string) {
 
   const result = md.render(text);
   outputText.innerHTML = result;
-  // outputText.innerText = text + "\n\n" + result;
+  // outputText.innerText = text + "\n\n" + result; // For testing.
+  markdownText = text;
+
   refreshWindowSize();
 }
 
@@ -93,6 +98,7 @@ async function run() {
     // Disable input to signal generation is in progress.
     input.disabled = true;
     loader.hidden = false;
+    copyMarkdownButton.style.display = "none";
 
     const prompt = `<!-- Request -->
 
@@ -119,9 +125,12 @@ ${input.value}
       alert(`${error}\n\nIs Ollama running?`);
     }
   } finally {
+    // Reset UI state.
     response = undefined;
     input.disabled = false;
     loader.hidden = true;
+    copyMarkdownButton.style.display = "inline-block";
+    refreshWindowSize();
 
     // Return focus to input so that we can continue typing.
     // input.focus()
@@ -163,6 +172,15 @@ input.addEventListener("input", () => {
   input.style.height = "auto";
   input.style.height = `${input.scrollHeight}px`;
   refreshWindowSize();
+});
+
+// Copy Markdown.
+copyMarkdownButton.addEventListener("click", () => {
+  if (markdownText) {
+    navigator.clipboard.writeText(markdownText).then(() => {
+      alert("Copied to clipboard");
+    });
+  }
 });
 
 // Initialize HTML elements.

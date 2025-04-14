@@ -70,3 +70,7 @@ body {
   padding: 0.5ex;
   font-size: x-large;
 }
+
+#copy-markdown-button {
+  -webkit-app-region: no-drag;
+}
