@@ -12,7 +12,7 @@ import { defaultSettings, Settings } from "./settings";
 let settings = defaultSettings();
 
 const input = document.getElementById("input") as HTMLTextAreaElement;
-const outputDiv = document.getElementById("output");
+const outputContainer = document.getElementById("output-container");
 const outputText = document.getElementById("output-text");
 const loader = document.getElementById("loader");
 
@@ -68,7 +68,7 @@ md.use(mila, {
 });
 
 function setOutputMarkdown(text: string) {
-  outputDiv.hidden = text.length == 0;
+  outputContainer.hidden = text.length == 0;
 
   if (text.startsWith("```")) {
     const i = text.indexOf("\n");
@@ -167,7 +167,7 @@ input.addEventListener("input", () => {
 
 // Initialize HTML elements.
 input.focus();
-outputDiv.hidden = true;
+outputContainer.hidden = true;
 refreshWindowSize();
 loader.hidden = true;
 
