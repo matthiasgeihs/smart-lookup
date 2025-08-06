@@ -183,8 +183,23 @@ const createWindow = (): void => {
       : path.join(__dirname, "..", "..", "assets", iconFileName);
     const tray = new Tray(iconPath);
 
+    const reloadSettings = () => {
+      try {
+        const settingsData = fs.readFileSync(settingsPath, "utf-8");
+        settings = {
+          ...settings,
+          ...JSON.parse(settingsData),
+        };
+        mainWindow?.webContents.send("update-settings", settings);
+      } catch (error) {
+        console.error("Failed to reload settings:", error);
+      }
+    };
+
     const contextMenu = Menu.buildFromTemplate([
       { label: `Settings...`, type: "normal", click: openSettings },
+      { label: `Reload Settings`, type: "normal", click: reloadSettings },
+      { type: "separator" },
       { label: `Quit ${app.name}`, type: "normal", click: app.quit },
     ]);
     tray.setContextMenu(contextMenu);
