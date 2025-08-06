@@ -163,6 +163,10 @@ window.addEventListener("keydown", (event) => {
       input.disabled = false;
       input.focus();
       setOutputMarkdown("");
+
+      // Resize.
+      input.style.height = "auto";
+      input.style.height = `${input.scrollHeight}px`;
       refreshWindowSize();
     } else {
       window.electronAPI.hideWindow();
@@ -207,5 +211,6 @@ window.addEventListener("unhandledrejection", (event) => {
 
 // Test environment.
 if (process.env.NODE_ENV === "development") {
-  setOutputMarkdown("# Hello World\n\nThis is a test.");
+  input.value = "# Hello World\n\nThis is a test.";
+  setOutputMarkdown("# Hello World\n\nThis is a test.".repeat(100));
 }
